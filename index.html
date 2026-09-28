@@ -236,7 +236,7 @@
       shareTextLabel: "Texto para compartir", shareImgAlt: "Tu progreso rumbo a Doomsday",
       footerStorage: "Tu progreso se guarda en este navegador. No sale de acá.",
       tagKey: "clave", tagOpt: "opcional",
-      footerKey: "marca lo que más pesa para entender Doomsday.",
+      footerKey: "marca la lista oficial de Disney para Doomsday, más lo que suma para seguir la trama.",
       footerOpt: "es Marvel Animation fuera del canon principal, las series viejas de Marvel Television, o un reestreno.",
       reset: "Borrar todo el progreso", resetYes: "Sí, borrar", resetNo: "Cancelar",
       resetConfirm: n => `¿Borrar las ${n} marcas?`,
@@ -245,6 +245,7 @@
       upcoming: "próximamente", notReleased: "todavía no estrenada",
       phase: n => `Fase ${n}`,
       tvName: "Marvel Television", tvNote: "Netflix y ABC, 2013 a 2019. Semi-canon: Born Again retoma parte de Daredevil.",
+      foxName: "X-Men de Fox", foxNote: "El elenco original vuelve en Doomsday. Están en la lista oficial de Disney.",
       countdownIn: d => `Doomsday estrena en <b>${d} día${d === 1 ? "" : "s"}</b>`,
       countdownToday: "<b>Doomsday estrena hoy</b>", countdownOut: "Doomsday ya está en cines",
       clockUnits: ["días", "hs", "min", "seg"],
@@ -278,7 +279,7 @@
       shareTextLabel: "Text to share", shareImgAlt: "Your progress on the road to Doomsday",
       footerStorage: "Your progress is saved in this browser. It never leaves it.",
       tagKey: "key", tagOpt: "optional",
-      footerKey: "marks what matters most to follow Doomsday.",
+      footerKey: "marks Disney's official Doomsday watchlist, plus what helps follow the story.",
       footerOpt: "is Marvel Animation outside the main canon, the old Marvel Television shows, or a re-release.",
       reset: "Clear all progress", resetYes: "Yes, clear", resetNo: "Cancel",
       resetConfirm: n => `Clear ${n} checked title${n === 1 ? "" : "s"}?`,
@@ -287,6 +288,7 @@
       upcoming: "coming soon", notReleased: "not released yet",
       phase: n => `Phase ${n}`,
       tvName: "Marvel Television", tvNote: "Netflix and ABC, 2013 to 2019. Semi-canon: Born Again picks up part of Daredevil.",
+      foxName: "Fox X-Men", foxNote: "The original cast returns in Doomsday. Both are on Disney's official watchlist.",
       countdownIn: d => `Doomsday opens in <b>${d} day${d === 1 ? "" : "s"}</b>`,
       countdownToday: "<b>Doomsday opens today</b>", countdownOut: "Doomsday is in theaters",
       clockUnits: ["days", "hrs", "min", "sec"],
@@ -316,13 +318,17 @@
   // Item: [id, { es, en }, kind, date, flags]. date: "YYYY-MM", "YYYY-MM-DD" or "YYYY..YYYY".
   // key: pesa para Doomsday. opt: no cuenta en el % salvo que se active el toggle.
   const PHASES = [
+    { id: "fox", items: [
+      ["xmen", { es: "X-Men", en: "X-Men" }, "film", "2000-07", { key: true }],
+      ["x2", { es: "X-Men 2", en: "X2" }, "film", "2003-05", { key: true }],
+    ]},
     { id: 1, items: [
       ["im1", { es: "Iron Man", en: "Iron Man" }, "film", "2008-05"],
       ["hulk", { es: "El Increíble Hulk", en: "The Incredible Hulk" }, "film", "2008-06"],
       ["im2", { es: "Iron Man 2", en: "Iron Man 2" }, "film", "2010-05"],
       ["thor1", { es: "Thor", en: "Thor" }, "film", "2011-05"],
-      ["cap1", { es: "Capitán América: El Primer Vengador", en: "Captain America: The First Avenger" }, "film", "2011-07"],
-      ["avengers", { es: "The Avengers", en: "The Avengers" }, "film", "2012-05"],
+      ["cap1", { es: "Capitán América: El Primer Vengador", en: "Captain America: The First Avenger" }, "film", "2011-07", { key: true }],
+      ["avengers", { es: "The Avengers", en: "The Avengers" }, "film", "2012-05", { key: true }],
     ]},
     { id: 2, items: [
       ["im3", { es: "Iron Man 3", en: "Iron Man 3" }, "film", "2013-05"],
@@ -360,7 +366,7 @@
       ["loki1", { es: "Loki, temporada 1", en: "Loki, season 1" }, "series", "2021-06", { key: true }],
       ["widow", { es: "Black Widow", en: "Black Widow" }, "film", "2021-07"],
       ["whatif1", { es: "What If...?, temporada 1", en: "What If...?, season 1" }, "animated", "2021-08"],
-      ["shangchi", { es: "Shang-Chi y la Leyenda de los Diez Anillos", en: "Shang-Chi and the Legend of the Ten Rings" }, "film", "2021-09"],
+      ["shangchi", { es: "Shang-Chi y la Leyenda de los Diez Anillos", en: "Shang-Chi and the Legend of the Ten Rings" }, "film", "2021-09", { key: true }],
       ["eternals", { es: "Eternals", en: "Eternals" }, "film", "2021-11"],
       ["hawkeye", { es: "Hawkeye", en: "Hawkeye" }, "series", "2021-11"],
       ["nwh", { es: "Spider-Man: No Way Home", en: "Spider-Man: No Way Home" }, "film", "2021-12", { key: true }],
@@ -429,7 +435,7 @@
 
   const allItems = PHASES.flatMap(p => p.items.map(([id, title, kind, date, flags = {}]) => ({ id, title, kind, date, ...flags })));
   const phaseItems = (phase) => phase.items.map(([id]) => allItems.find(i => i.id === id));
-  const phaseName = (phase) => phase.id === "tv" ? t.tvName : t.phase(phase.id);
+  const phaseName = (phase) => phase.id === "tv" ? t.tvName : phase.id === "fox" ? t.foxName : t.phase(phase.id);
   const inScope = (i) => state.filter === "key" ? !!i.key : true;
   const counts = (items) => {
     const eligible = items.filter(i => inScope(i) && !i.upcoming && (state.countOptional || !i.opt));
@@ -494,7 +500,8 @@
       const shown = items.filter(visible);
       if (!shown.length) return;
       const { total, seen } = counts(items);
-      const note = phase.id === "tv" ? `<small>${t.tvNote}</small>` : "";
+      const noteText = phase.id === "tv" ? t.tvNote : phase.id === "fox" ? t.foxNote : "";
+      const note = noteText ? `<small>${noteText}</small>` : "";
       const section = document.createElement("section");
       section.className = "phase";
       section.innerHTML = `
