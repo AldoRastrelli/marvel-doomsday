@@ -215,6 +215,7 @@
 
 <script>
   const DOOMSDAY = new Date(2026, 11, 18);
+  const SITE_URL = "https://aldanarastrelli.dev.ar/rumbo-a-doomsday/";
   const STORE = "rumbo-a-doomsday-v1";
 
   // key: pesa para Doomsday. opt: no cuenta en el % salvo que se active el toggle.
@@ -488,6 +489,7 @@
       blocks,
       `${seen} de ${total} títulos del MCU vistos · ${keyLeft} clave${keyLeft === 1 ? "" : "s"} pendiente${keyLeft === 1 ? "" : "s"}`,
       days > 0 ? `Faltan ${days} día${days === 1 ? "" : "s"}.` : "Doomsday ya está en cines.",
+      SITE_URL,
     ].join("\n");
   }
 
@@ -556,8 +558,8 @@
     const rows = PHASES
       .map(p => ({ name: p.name, ...counts(p.items.map(([id]) => allItems.find(i => i.id === id))) }))
       .filter(r => r.total > 0);
-    const rowH = Math.min(46, Math.floor(260 / rows.length));
-    let y = 760;
+    const rowH = Math.min(40, Math.floor(220 / rows.length));
+    let y = 745;
     rows.forEach(r => {
       ctx.fillStyle = INK; ctx.font = display(700, 30); ctx.textAlign = "left";
       ctx.fillText(r.name.toUpperCase(), 90, y + 10);
@@ -570,7 +572,9 @@
     });
 
     ctx.fillStyle = MUTED; ctx.font = sans(400, 24); ctx.textAlign = "center";
-    ctx.fillText("Avengers: Doomsday · 18 de diciembre de 2026", W / 2, H - 70);
+    ctx.fillText("Avengers: Doomsday · 18 de diciembre de 2026", W / 2, H - 105);
+    ctx.fillStyle = GOLD; ctx.font = sans(600, 28);
+    ctx.fillText("aldanarastrelli.dev.ar/rumbo-a-doomsday", W / 2, H - 62);
 
     return c;
   }
@@ -621,7 +625,7 @@
     img.hidden = false;
     const file = new File([blob], "rumbo-a-doomsday.png", { type: "image/png" });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], text: shareText() }); shareStatus.textContent = "Compartido."; return; }
+      try { await navigator.share({ files: [file], text: shareText(), url: SITE_URL }); shareStatus.textContent = "Compartido."; return; }
       catch (e) { if (e && e.name === "AbortError") { shareStatus.textContent = ""; return; } }
     }
     shareStatus.textContent = "Mantené apretada la imagen (o click derecho) para guardarla.";
