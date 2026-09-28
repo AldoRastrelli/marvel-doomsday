@@ -8,7 +8,7 @@
 <meta property="og:title" content="Rumbo a Doomsday">
 <meta property="og:description" content="Marcá las películas y series del MCU que viste y fijate qué tan lista estás para Avengers: Doomsday.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://aldanarastrelli.dev.ar/rumbo-a-doomsday/">
+<meta property="og:url" content="https://aldanarastrelli.dev.ar/marvel-doomsday/">
 <style>html, body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }</style>
 <title>Rumbo a Doomsday</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -223,7 +223,7 @@
 
 <script>
   const DOOMSDAY = new Date(2026, 11, 18);
-  const SITE_URL = "https://aldanarastrelli.dev.ar/rumbo-a-doomsday/";
+  const SITE_URL = "https://aldanarastrelli.dev.ar/marvel-doomsday/";
   const STORE = "rumbo-a-doomsday-v1";
 
   const T = {
@@ -691,7 +691,7 @@
     ctx.fillStyle = MUTED; ctx.font = sans(400, 24); ctx.textAlign = "center";
     ctx.fillText(t.cardDate, W / 2, H - 105);
     ctx.fillStyle = GOLD; ctx.font = sans(600, 28);
-    ctx.fillText("aldanarastrelli.dev.ar/rumbo-a-doomsday", W / 2, H - 62);
+    ctx.fillText("aldanarastrelli.dev.ar/marvel-doomsday", W / 2, H - 62);
 
     return c;
   }
@@ -735,7 +735,7 @@
     const img = document.getElementById("shareImg");
     img.src = URL.createObjectURL(blob);
     img.hidden = false;
-    const file = new File([blob], "rumbo-a-doomsday.png", { type: "image/png" });
+    const file = new File([blob], "marvel-doomsday.png", { type: "image/png" });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try { await navigator.share({ files: [file], text: shareText(), url: SITE_URL }); shareStatus.textContent = t.shared; return; }
       catch (e) { if (e && e.name === "AbortError") { shareStatus.textContent = ""; return; } }
