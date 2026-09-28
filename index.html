@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Checklist del MCU en orden de estreno. Marcá lo que viste y fijate qué tan lista estás para Avengers: Doomsday.">
+<meta property="og:title" content="Rumbo a Doomsday">
+<meta property="og:description" content="Marcá las películas y series del MCU que viste y fijate qué tan lista estás para Avengers: Doomsday.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aldorastrelli.github.io/rumbo-a-doomsday/">
+<style>html, body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }</style>
+<title>Rumbo a Doomsday</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --bg: #eef0ea;
+    --surface: #f7f8f4;
+    --ink: #172019;
+    --muted: #5b6a5e;
+    --line: #cfd6cd;
+    --accent: #1f6b45;
+    --accent-ink: #f3f7f1;
+    --gold: #b8860b;
+    --gold-soft: #f1e4b8;
+    --check: #1f6b45;
+    --danger: #a33a2e;
+    --shadow: 0 1px 2px rgba(23, 32, 25, .08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0e1411;
+      --surface: #161d19;
+      --ink: #e6ebe4;
+      --muted: #97a69b;
+      --line: #2a3530;
+      --accent: #3fa16d;
+      --accent-ink: #0b1a11;
+      --gold: #e0b341;
+      --gold-soft: #3a3115;
+      --check: #3fa16d;
+      --danger: #e07364;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0e1411;
+    --surface: #161d19;
+    --ink: #e6ebe4;
+    --muted: #97a69b;
+    --line: #2a3530;
+    --accent: #3fa16d;
+    --accent-ink: #0b1a11;
+    --gold: #e0b341;
+    --gold-soft: #3a3115;
+    --check: #3fa16d;
+    --danger: #e07364;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    padding-inline: 16px;
+    padding-block: 0 48px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 28px; }
+
+  .display { font-family: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif; text-transform: uppercase; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  header.hero {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2;
+    background: var(--bg);
+    padding-block: 18px 14px;
+    border-bottom: 1px solid var(--line);
+    display: grid; gap: 10px;
+  }
+  .hero-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 34px; font-weight: 900; line-height: 1; letter-spacing: .01em; }
+  .countdown { color: var(--muted); font-size: 13px; display: grid; gap: 2px; justify-items: end; }
+  .countdown b { color: var(--ink); font-weight: 500; }
+  .clock { display: flex; gap: 10px; }
+  .clock div { display: grid; justify-items: center; min-width: 34px; }
+  .clock .n { font-size: 26px; font-weight: 700; line-height: 1; color: var(--ink); }
+  .clock .u { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+
+  .readiness { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: end; }
+  .pct { font-size: 64px; font-weight: 900; line-height: .9; color: var(--accent); }
+  .pct small { font-size: 28px; }
+  .readiness-text { display: grid; gap: 6px; padding-bottom: 6px; }
+  .readiness-text p { margin: 0; font-size: 15px; }
+  .readiness-text .sub { color: var(--muted); font-size: 13px; }
+  .bar { height: 10px; background: var(--line); border-radius: 999px; overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .35s ease; }
+  .bar span.done { background: var(--gold); }
+
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    padding: 5px 11px; border-radius: 999px; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .toggle { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .toggle input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+  .share { display: grid; gap: 8px; }
+  .share-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    border: 0; background: var(--accent); color: var(--accent-ink);
+    padding: 8px 14px; border-radius: 6px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .share-status { font-size: 13px; color: var(--muted); }
+  .btn.secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .share img { display: block; max-width: 100%; width: 420px; border-radius: 8px; border: 1px solid var(--line); }
+  .share textarea {
+    width: 100%; min-height: 84px; resize: vertical; font: inherit; font-size: 13px;
+    color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 8px;
+  }
+
+  section.phase { display: grid; gap: 8px; }
+  .phase-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+  .phase-head h2 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: .02em; }
+  .phase-head h2 small { font-family: "IBM Plex Sans", sans-serif; text-transform: none; font-size: 13px; color: var(--muted); font-weight: 400; letter-spacing: 0; margin-left: 8px; }
+  .phase-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+  .link { background: none; border: 0; color: var(--accent); font: inherit; font-size: 13px; cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
+
+  ol.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .item {
+    display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center;
+    padding: 9px 10px; border-radius: 6px; background: var(--surface); box-shadow: var(--shadow);
+  }
+  .item label { display: contents; cursor: pointer; }
+  .item input { width: 18px; height: 18px; margin: 0; accent-color: var(--check); cursor: pointer; }
+  .item .title { font-weight: 500; }
+  .item .meta { color: var(--muted); font-size: 12.5px; }
+  .item.seen .title { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .tags { display: flex; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
+  .tag { font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .tag.key { border-color: var(--gold); color: var(--gold); background: var(--gold-soft); }
+  .item.upcoming { opacity: .7; }
+  .item.upcoming .title::after { content: " · próximamente"; color: var(--muted); font-weight: 400; }
+  .empty { color: var(--muted); font-size: 13px; padding: 8px 10px; }
+
+  footer { display: grid; gap: 10px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+  footer p { margin: 0; }
+  .danger { color: var(--danger); }
+  .confirm { display: flex; gap: 8px; align-items: center; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 480px) {
+    .pct { font-size: 52px; }
+    .countdown { justify-items: start; }
+    .item { grid-template-columns: 22px 1fr; }
+    .tags { grid-column: 2; justify-content: flex-start; }
+    .toggle { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-top">
+      <h1 class="display">Rumbo a Doomsday</h1>
+      <div class="countdown">
+        <div id="countdown"></div>
+        <div class="clock display mono" id="clock" aria-live="off"></div>
+      </div>
+    </div>
+    <div class="readiness">
+      <div class="pct display mono" id="pct">0<small>%</small></div>
+      <div class="readiness-text">
+        <p id="headline">Estás al 0% para Doomsday.</p>
+        <p class="sub" id="counts"></p>
+        <div class="bar"><span id="barfill"></span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="chips" role="group" aria-label="Filtro">
+        <button class="chip" data-filter="all" aria-pressed="true">Todo</button>
+        <button class="chip" data-filter="pending" aria-pressed="false">Me falta</button>
+        <button class="chip" data-filter="key" aria-pressed="false">Clave para Doomsday</button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="countOptional"> Contar opcionales en el %</label>
+    </div>
+  </header>
+
+  <section class="share">
+    <div class="share-row">
+      <button class="btn" id="shareImgBtn">Compartir como imagen</button>
+      <button class="btn secondary" id="shareBtn">Copiar como texto</button>
+      <span class="share-status" id="shareStatus" aria-live="polite"></span>
+    </div>
+    <textarea id="shareText" readonly hidden aria-label="Texto para compartir"></textarea>
+    <img id="shareImg" hidden alt="Tu progreso rumbo a Doomsday">
+    <canvas id="shareCanvas" width="1080" height="1080" hidden></canvas>
+  </section>
+
+  <main id="phases"></main>
+
+  <footer>
+    <p>Tu progreso se guarda en este navegador. No sale de acá.</p>
+    <p><span class="tag key">clave</span> marca lo que más pesa para entender Doomsday. <span class="tag">opcional</span> es Marvel Animation fuera del canon principal, las series viejas de Marvel Television, o un reestreno.</p>
+    <div id="resetZone"><button class="link danger" id="resetBtn">Borrar todo el progreso</button></div>
+  </footer>
+</div>
+
+<script>
+  const DOOMSDAY = new Date(2026, 11, 18);
+  const STORE = "rumbo-a-doomsday-v1";
+
+  // key: pesa para Doomsday. opt: no cuenta en el % salvo que se active el toggle.
+  const PHASES = [
+    { name: "Fase 1", items: [
+      ["im1", "Iron Man", "película", "may 2008"],
+      ["hulk", "El Increíble Hulk", "película", "jun 2008"],
+      ["im2", "Iron Man 2", "película", "may 2010"],
+      ["thor1", "Thor", "película", "may 2011"],
+      ["cap1", "Capitán América: El Primer Vengador", "película", "jul 2011"],
+      ["avengers", "The Avengers", "película", "may 2012"],
+    ]},
+    { name: "Fase 2", items: [
+      ["im3", "Iron Man 3", "película", "may 2013"],
+      ["thor2", "Thor: Un Mundo Oscuro", "película", "nov 2013"],
+      ["cap2", "Capitán América: El Soldado del Invierno", "película", "abr 2014"],
+      ["gotg1", "Guardianes de la Galaxia", "película", "ago 2014"],
+      ["aou", "Avengers: La Era de Ultrón", "película", "may 2015"],
+      ["antman", "Ant-Man", "película", "jul 2015"],
+    ]},
+    { name: "Fase 3", items: [
+      ["civilwar", "Capitán América: Civil War", "película", "may 2016", { key: true }],
+      ["strange", "Doctor Strange", "película", "nov 2016"],
+      ["gotg2", "Guardianes de la Galaxia Vol. 2", "película", "may 2017"],
+      ["homecoming", "Spider-Man: De Regreso a Casa", "película", "jul 2017"],
+      ["ragnarok", "Thor: Ragnarok", "película", "nov 2017"],
+      ["bp1", "Black Panther", "película", "feb 2018"],
+      ["iw", "Avengers: Infinity War", "película", "abr 2018", { key: true }],
+      ["antman2", "Ant-Man and the Wasp", "película", "jul 2018"],
+      ["capmarvel", "Capitana Marvel", "película", "mar 2019"],
+      ["endgame", "Avengers: Endgame", "película", "abr 2019", { key: true }],
+      ["ffh", "Spider-Man: Lejos de Casa", "película", "jul 2019"],
+    ]},
+    { name: "Marvel Television", note: "Netflix y ABC, 2013 a 2019. Semi-canon: Born Again retoma parte de Daredevil.", items: [
+      ["aos", "Agents of S.H.I.E.L.D. (7 temporadas)", "serie ABC", "2013 a 2020", { opt: true }],
+      ["nf-dd", "Daredevil (3 temporadas)", "serie Netflix", "2015 a 2018", { opt: true }],
+      ["nf-jj", "Jessica Jones (3 temporadas)", "serie Netflix", "2015 a 2019", { opt: true }],
+      ["nf-lc", "Luke Cage (2 temporadas)", "serie Netflix", "2016 a 2018", { opt: true }],
+      ["nf-if", "Iron Fist (2 temporadas)", "serie Netflix", "2017 a 2018", { opt: true }],
+      ["nf-def", "The Defenders", "serie Netflix", "ago 2017", { opt: true }],
+      ["nf-pun", "The Punisher (2 temporadas)", "serie Netflix", "2017 a 2019", { opt: true }],
+    ]},
+    { name: "Fase 4", items: [
+      ["wandavision", "WandaVision", "serie", "ene 2021", { key: true }],
+      ["fatws", "Falcon y el Soldado del Invierno", "serie", "mar 2021"],
+      ["loki1", "Loki, temporada 1", "serie", "jun 2021", { key: true }],
+      ["widow", "Black Widow", "película", "jul 2021"],
+      ["whatif1", "What If...?, temporada 1", "animada", "ago 2021"],
+      ["shangchi", "Shang-Chi y la Leyenda de los Diez Anillos", "película", "sep 2021"],
+      ["eternals", "Eternals", "película", "nov 2021"],
+      ["hawkeye", "Hawkeye", "serie", "nov 2021"],
+      ["nwh", "Spider-Man: No Way Home", "película", "dic 2021", { key: true }],
+      ["moonknight", "Moon Knight", "serie", "mar 2022"],
+      ["mom", "Doctor Strange en el Multiverso de la Locura", "película", "may 2022", { key: true }],
+      ["msmarvel", "Ms. Marvel", "serie", "jun 2022"],
+      ["thor4", "Thor: Love and Thunder", "película", "jul 2022"],
+      ["groot1", "I Am Groot, temporada 1", "cortos", "ago 2022", { opt: true }],
+      ["shehulk", "She-Hulk: Abogada Hulka", "serie", "ago 2022"],
+      ["werewolf", "Werewolf by Night", "especial", "oct 2022"],
+      ["bp2", "Black Panther: Wakanda Forever", "película", "nov 2022", { key: true }],
+      ["holiday", "The Guardians of the Galaxy Holiday Special", "especial", "nov 2022"],
+    ]},
+    { name: "Fase 5", items: [
+      ["quantumania", "Ant-Man and the Wasp: Quantumania", "película", "feb 2023"],
+      ["gotg3", "Guardianes de la Galaxia Vol. 3", "película", "may 2023"],
+      ["secretinvasion", "Secret Invasion", "serie", "jun 2023"],
+      ["groot2", "I Am Groot, temporada 2", "cortos", "sep 2023", { opt: true }],
+      ["loki2", "Loki, temporada 2", "serie", "oct 2023", { key: true }],
+      ["marvels", "The Marvels", "película", "nov 2023"],
+      ["whatif2", "What If...?, temporada 2", "animada", "dic 2023"],
+      ["echo", "Echo", "serie", "ene 2024"],
+      ["xmen97a", "X-Men '97, temporada 1", "animada", "mar 2024", { opt: true }],
+      ["dpw", "Deadpool & Wolverine", "película", "jul 2024", { key: true }],
+      ["agatha", "Agatha All Along", "serie", "sep 2024"],
+      ["whatif3", "What If...?, temporada 3", "animada", "dic 2024"],
+      ["yfnsm1", "Your Friendly Neighborhood Spider-Man, temporada 1", "animada", "ene 2025", { opt: true }],
+      ["cap4", "Capitán América: Un Nuevo Mundo", "película", "feb 2025", { key: true }],
+      ["ddba1", "Daredevil: Born Again, temporada 1", "serie", "mar 2025"],
+      ["thunderbolts", "Thunderbolts*", "película", "may 2025", { key: true }],
+      ["ironheart", "Ironheart", "serie", "jun 2025"],
+    ]},
+    { name: "Fase 6", items: [
+      ["ff", "Los 4 Fantásticos: Primeros Pasos", "película", "jul 2025", { key: true }],
+      ["eyes", "Eyes of Wakanda", "animada", "ago 2025"],
+      ["zombies", "Marvel Zombies", "animada", "sep 2025"],
+      ["wonderman", "Wonder Man", "serie", "ene 2026"],
+      ["ddba2", "Daredevil: Born Again, temporada 2", "serie", "mar 2026"],
+      ["punisher", "The Punisher: One Last Kill", "especial", "may 2026"],
+      ["xmen97b", "X-Men '97, temporada 2", "animada", "jul 2026", { opt: true }],
+      ["bnd", "Spider-Man: Brand New Day", "película", "jul 2026", { key: true }],
+      ["encore", "Avengers Endgame: Encore", "reestreno", "sep 2026", { opt: true }],
+      ["visionquest", "VisionQuest", "serie", "14 oct 2026", { upcoming: true }],
+      ["doomsday", "Avengers: Doomsday", "película", "18 dic 2026", { upcoming: true, final: true }],
+    ]},
+  ];
+
+  const state = load();
+
+  function load() {
+    const base = { seen: {}, countOptional: false, filter: "all" };
+    try {
+      const raw = localStorage.getItem(STORE);
+      return raw ? { ...base, ...JSON.parse(raw) } : base;
+    } catch { return base; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch {}
+  }
+
+  const allItems = PHASES.flatMap(p => p.items.map(([id, title, kind, date, flags = {}]) => ({ id, title, kind, date, ...flags })));
+  const inScope = (i) => state.filter === "key" ? !!i.key : true;
+  const counts = (items) => {
+    const eligible = items.filter(i => inScope(i) && !i.upcoming && (state.countOptional || !i.opt));
+    const seen = eligible.filter(i => state.seen[i.id]);
+    return { total: eligible.length, seen: seen.length };
+  };
+
+  function headlineFor(pct) {
+    const scope = state.filter === "key" ? "en lo clave para Doomsday" : "para Doomsday";
+    if (pct === 100) return `Estás al 100% ${scope}. Latveria te espera.`;
+    if (pct >= 90) return `Estás al ${pct}% ${scope}. Ya casi.`;
+    if (pct >= 30 && pct < 60) return `Estás al ${pct}% ${scope}. Buen ritmo.`;
+    return `Estás al ${pct}% ${scope}.`;
+  }
+
+  function renderSummary() {
+    const { total, seen } = counts(allItems);
+    const pct = total ? Math.round((seen / total) * 100) : 0;
+    document.getElementById("pct").innerHTML = `${pct}<small>%</small>`;
+    document.getElementById("headline").textContent = headlineFor(pct);
+    const keyLeft = allItems.filter(i => i.key && !state.seen[i.id]).length;
+    const label = state.filter === "key" ? "títulos clave vistos" : "títulos vistos";
+    document.getElementById("counts").textContent =
+      `${seen} de ${total} ${label} · ${keyLeft} clave${keyLeft === 1 ? "" : "s"} pendiente${keyLeft === 1 ? "" : "s"}`;
+    const fill = document.getElementById("barfill");
+    fill.style.width = pct + "%";
+    fill.classList.toggle("done", pct === 100);
+  }
+
+  function renderCountdown() {
+    const ms = DOOMSDAY - Date.now();
+    const days = Math.ceil(ms / 86400000);
+    const el = document.getElementById("countdown");
+    el.innerHTML = days > 0
+      ? `Doomsday estrena en <b>${days} día${days === 1 ? "" : "s"}</b>`
+      : days === 0 ? "<b>Doomsday estrena hoy</b>" : "Doomsday ya está en cines";
+
+    const clock = document.getElementById("clock");
+    if (ms <= 0) { clock.hidden = true; return; }
+    const pad = n => String(n).padStart(2, "0");
+    const parts = [
+      [Math.floor(ms / 86400000), "días"],
+      [Math.floor(ms / 3600000) % 24, "hs"],
+      [Math.floor(ms / 60000) % 60, "min"],
+      [Math.floor(ms / 1000) % 60, "seg"],
+    ];
+    clock.innerHTML = parts.map(([n, u]) => `<div><span class="n">${pad(n)}</span><span class="u">${u}</span></div>`).join("");
+  }
+
+  function visible(item) {
+    if (state.filter === "pending") return !state.seen[item.id] && !item.upcoming;
+    if (state.filter === "key") return item.key;
+    return true;
+  }
+
+  function renderPhases() {
+    const root = document.getElementById("phases");
+    root.innerHTML = "";
+    PHASES.forEach(phase => {
+      const items = phase.items.map(([id]) => allItems.find(i => i.id === id));
+      const shown = items.filter(visible);
+      if (!shown.length) return;
+      const { total, seen } = counts(items);
+      const section = document.createElement("section");
+      section.className = "phase";
+      section.innerHTML = `
+        <div class="phase-head">
+          <h2 class="display">${phase.name}${phase.note ? `<small>${phase.note}</small>` : ""}</h2>
+          <div class="phase-meta">
+            <span class="mono">${seen}/${total}</span>
+            <button class="link" data-phase="${phase.name}">${seen === total ? "Desmarcar fase" : "Marcar fase completa"}</button>
+          </div>
+        </div>
+        <ol class="items">
+          ${shown.map(rowHtml).join("")}
+        </ol>`;
+      root.appendChild(section);
+    });
+    if (!root.children.length) {
+      root.innerHTML = `<p class="empty">Nada que mostrar con este filtro. Ya viste todo lo que entra acá.</p>`;
+    }
+  }
+
+  function rowHtml(i) {
+    const seen = !!state.seen[i.id];
+    const tags = [
+      i.key ? `<span class="tag key">clave</span>` : "",
+      i.opt ? `<span class="tag">opcional</span>` : "",
+    ].join("");
+    const cls = ["item", seen ? "seen" : "", i.upcoming ? "upcoming" : ""].join(" ");
+    const control = i.upcoming
+      ? `<input type="checkbox" id="chk-${i.id}" disabled aria-label="${i.title}, todavía no estrenada">`
+      : `<input type="checkbox" id="chk-${i.id}" data-id="${i.id}" ${seen ? "checked" : ""}>`;
+    return `
+      <li class="${cls}">
+        <label for="chk-${i.id}">
+          ${control}
+          <div>
+            <div class="title">${i.title}</div>
+            <div class="meta">${i.kind} · ${i.date}</div>
+          </div>
+        </label>
+        <div class="tags">${tags}</div>
+      </li>`;
+  }
+
+  function renderAll() { renderSummary(); renderPhases(); }
+
+  document.getElementById("phases").addEventListener("change", e => {
+    const id = e.target.dataset.id;
+    if (!id) return;
+    if (e.target.checked) state.seen[id] = true; else delete state.seen[id];
+    save(); renderAll();
+  });
+
+  document.getElementById("phases").addEventListener("click", e => {
+    const name = e.target.dataset.phase;
+    if (!name) return;
+    const phase = PHASES.find(p => p.name === name);
+    const items = phase.items.map(([id]) => allItems.find(i => i.id === id)).filter(i => inScope(i) && !i.upcoming && (state.countOptional || !i.opt));
+    const allSeen = items.every(i => state.seen[i.id]);
+    items.forEach(i => { if (allSeen) delete state.seen[i.id]; else state.seen[i.id] = true; });
+    save(); renderAll();
+  });
+
+  document.querySelectorAll(".chip").forEach(btn => {
+    btn.setAttribute("aria-pressed", String(btn.dataset.filter === state.filter));
+    btn.addEventListener("click", () => {
+      state.filter = btn.dataset.filter;
+      document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+      save(); renderAll();
+    });
+  });
+
+  const optToggle = document.getElementById("countOptional");
+  optToggle.checked = state.countOptional;
+  optToggle.addEventListener("change", () => { state.countOptional = optToggle.checked; save(); renderAll(); });
+
+  const resetZone = document.getElementById("resetZone");
+  resetZone.addEventListener("click", e => {
+    if (e.target.id === "resetBtn") {
+      resetZone.innerHTML = `<div class="confirm">¿Borrar las ${Object.keys(state.seen).length} marcas? <button class="link danger" id="resetYes">Sí, borrar</button> <button class="link" id="resetNo">Cancelar</button></div>`;
+    } else if (e.target.id === "resetYes") {
+      state.seen = {}; save(); renderAll(); restoreReset();
+    } else if (e.target.id === "resetNo") {
+      restoreReset();
+    }
+  });
+  function restoreReset() { resetZone.innerHTML = `<button class="link danger" id="resetBtn">Borrar todo el progreso</button>`; }
+
+  function shareText() {
+    const { total, seen } = counts(allItems);
+    const pct = total ? Math.round((seen / total) * 100) : 0;
+    const filled = Math.round(pct / 10);
+    const blocks = "🟩".repeat(filled) + "⬜".repeat(10 - filled);
+    const keyLeft = allItems.filter(i => i.key && !state.seen[i.id]).length;
+    const days = Math.ceil((DOOMSDAY - Date.now()) / 86400000);
+    const scope = state.filter === "key" ? " en lo clave" : "";
+    return [
+      `Estoy al ${pct}%${scope} para Avengers: Doomsday`,
+      blocks,
+      `${seen} de ${total} títulos del MCU vistos · ${keyLeft} clave${keyLeft === 1 ? "" : "s"} pendiente${keyLeft === 1 ? "" : "s"}`,
+      days > 0 ? `Faltan ${days} día${days === 1 ? "" : "s"}.` : "Doomsday ya está en cines.",
+    ].join("\n");
+  }
+
+  const shareStatus = document.getElementById("shareStatus");
+  const shareBox = document.getElementById("shareText");
+  function showFallback(text, msg) {
+    shareBox.value = text;
+    shareBox.hidden = false;
+    shareBox.focus();
+    shareBox.select();
+    shareStatus.textContent = msg;
+  }
+  document.getElementById("shareBtn").addEventListener("click", async () => {
+    const text = shareText();
+    shareBox.hidden = true;
+    if (navigator.share) {
+      try { await navigator.share({ text }); shareStatus.textContent = "Compartido."; return; }
+      catch (e) { if (e && e.name === "AbortError") { shareStatus.textContent = ""; return; } }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      shareStatus.textContent = "Copiado. Pegalo donde quieras.";
+      shareBox.value = text;
+      shareBox.hidden = false;
+    } catch {
+      showFallback(text, "Seleccioná el texto y copialo.");
+    }
+  });
+
+  async function drawShareCard() {
+    try { await document.fonts.ready; } catch {}
+    const c = document.getElementById("shareCanvas");
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    const display = (w, px) => `${w} ${px}px "Big Shoulders Display", "Arial Narrow", Impact, sans-serif`;
+    const sans = (w, px) => `${w} ${px}px "IBM Plex Sans", system-ui, sans-serif`;
+    const BG = "#0e1411", INK = "#e6ebe4", MUTED = "#97a69b", LINE = "#2a3530", GREEN = "#3fa16d", GOLD = "#e0b341";
+
+    const { total, seen } = counts(allItems);
+    const pct = total ? Math.round((seen / total) * 100) : 0;
+    const keyLeft = allItems.filter(i => i.key && !state.seen[i.id]).length;
+    const days = Math.ceil((DOOMSDAY - Date.now()) / 86400000);
+    const scopeLabel = state.filter === "key" ? "en lo clave para Avengers: Doomsday" : "para Avengers: Doomsday";
+
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2;
+    ctx.strokeRect(40, 40, W - 80, H - 80);
+
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = GOLD; ctx.font = display(700, 44); ctx.textAlign = "left";
+    ctx.fillText("RUMBO A DOOMSDAY", 90, 130);
+    drawClock(ctx, W - 90, 130, { display, sans, INK, MUTED });
+
+    ctx.fillStyle = GREEN; ctx.font = display(900, 360); ctx.textAlign = "center";
+    ctx.fillText(`${pct}%`, W / 2, 500);
+    ctx.fillStyle = INK; ctx.font = sans(500, 36);
+    ctx.fillText(scopeLabel, W / 2, 560);
+
+    const bx = 90, by = 610, bw = W - 180, bh = 22;
+    roundRect(ctx, bx, by, bw, bh, 11, LINE);
+    if (pct > 0) roundRect(ctx, bx, by, Math.max(bh, bw * pct / 100), bh, 11, pct === 100 ? GOLD : GREEN);
+
+    ctx.fillStyle = MUTED; ctx.font = sans(400, 28); ctx.textAlign = "center";
+    ctx.fillText(`${seen} de ${total} títulos vistos · ${keyLeft} clave${keyLeft === 1 ? "" : "s"} pendiente${keyLeft === 1 ? "" : "s"}`, W / 2, 680);
+
+    const rows = PHASES
+      .map(p => ({ name: p.name, ...counts(p.items.map(([id]) => allItems.find(i => i.id === id))) }))
+      .filter(r => r.total > 0);
+    const rowH = Math.min(46, Math.floor(260 / rows.length));
+    let y = 760;
+    rows.forEach(r => {
+      ctx.fillStyle = INK; ctx.font = display(700, 30); ctx.textAlign = "left";
+      ctx.fillText(r.name.toUpperCase(), 90, y + 10);
+      const rx = 400, rw = W - 90 - 110 - rx;
+      roundRect(ctx, rx, y - 10, rw, 14, 7, LINE);
+      if (r.seen > 0) roundRect(ctx, rx, y - 10, Math.max(14, rw * r.seen / r.total), 14, 7, r.seen === r.total ? GOLD : GREEN);
+      ctx.fillStyle = MUTED; ctx.font = sans(500, 24); ctx.textAlign = "right";
+      ctx.fillText(`${r.seen}/${r.total}`, W - 90, y + 6);
+      y += rowH;
+    });
+
+    ctx.fillStyle = MUTED; ctx.font = sans(400, 24); ctx.textAlign = "center";
+    ctx.fillText("Avengers: Doomsday · 18 de diciembre de 2026", W / 2, H - 70);
+
+    return c;
+  }
+  function drawClock(ctx, rightX, baseY, f) {
+    const ms = DOOMSDAY - Date.now();
+    if (ms <= 0) {
+      ctx.fillStyle = f.MUTED; ctx.font = f.sans(500, 28); ctx.textAlign = "right";
+      ctx.fillText("ya está en cines", rightX, baseY - 2);
+      return;
+    }
+    const pad = n => String(n).padStart(2, "0");
+    const parts = [
+      [Math.floor(ms / 86400000), "DÍAS"],
+      [Math.floor(ms / 3600000) % 24, "HS"],
+      [Math.floor(ms / 60000) % 60, "MIN"],
+      [Math.floor(ms / 1000) % 60, "SEG"],
+    ];
+    const colW = 96;
+    let x = rightX - colW * parts.length;
+    ctx.textAlign = "center";
+    parts.forEach(([n, u], idx) => {
+      const cx = x + colW / 2;
+      ctx.fillStyle = f.INK; ctx.font = f.display(700, 52);
+      ctx.fillText(pad(n), cx, baseY);
+      ctx.fillStyle = f.MUTED; ctx.font = f.sans(500, 16);
+      ctx.fillText(u, cx, baseY + 24);
+      if (idx < parts.length - 1) {
+        ctx.fillStyle = f.MUTED; ctx.font = f.display(700, 40);
+        ctx.fillText(":", x + colW, baseY - 4);
+      }
+      x += colW;
+    });
+  }
+  function roundRect(ctx, x, y, w, h, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fill();
+  }
+
+  document.getElementById("shareImgBtn").addEventListener("click", async () => {
+    shareBox.hidden = true;
+    shareStatus.textContent = "Generando...";
+    const c = await drawShareCard();
+    const blob = await new Promise(res => c.toBlob(res, "image/png"));
+    const img = document.getElementById("shareImg");
+    img.src = URL.createObjectURL(blob);
+    img.hidden = false;
+    const file = new File([blob], "rumbo-a-doomsday.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: shareText() }); shareStatus.textContent = "Compartido."; return; }
+      catch (e) { if (e && e.name === "AbortError") { shareStatus.textContent = ""; return; } }
+    }
+    shareStatus.textContent = "Mantené apretada la imagen (o click derecho) para guardarla.";
+  });
+
+  renderCountdown();
+  setInterval(renderCountdown, 1000);
+  renderAll();
+</script>
+</body>
+</html>
